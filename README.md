@@ -15,7 +15,9 @@ git clone https://github.com/xManumx/Travel-North-Python.git
 cd Travel-North-Python
 ```
 
-Para la presentación entre dos personas, abre `GUION_DOS_PERSONAS.txt`. El recorrido está planeado para 8 minutos y 30 segundos, con margen antes del límite de 10 minutos.
+Para la presentación detallada entre dos personas, abre [GUION_DETALLADO_DOS_PERSONAS.pdf](GUION_DETALLADO_DOS_PERSONAS.pdf). Está planeada para 15 minutos: 7 minutos y 30 segundos por persona, con 30 segundos de margen hasta el máximo de 8 minutos de cada intervención. Incluye el texto para decir, las acciones de demostración, la relación con los requisitos de la guía y respuestas para la sustentación. Las páginas de apoyo no se leen durante el tiempo del guion.
+
+Si el profesor mantiene un límite de 10 minutos para toda la exposición, usa la versión breve `GUION_DOS_PERSONAS.txt`, planeada para 8 minutos y 30 segundos en total.
 
 Esta versión adapta el proyecto original: https://github.com/Juan04786/Travel-North---Intergrador-
 
