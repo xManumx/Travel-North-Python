@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Gestión de destinos, paquetes y reservas de Travel North.">
+  <title>Travel North | Gestión de viajes</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+  <script id="configuracion" type="application/json">{{ configuracion | tojson }}</script>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Ir al contenido</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Menú principal">
+      <a class="brand" href="/" aria-label="Travel North, inicio">
+        <span class="brand-mark" aria-hidden="true">TN</span>
+        <span><strong>Travel North</strong><small>Gestión de viajes</small></span>
+      </a>
+      <p class="nav-label">OPERACIÓN</p>
+      <nav aria-label="Secciones de gestión">
+        <button class="nav-item selected" data-resource="destinos" aria-current="page"><span>Destinos</span><span class="nav-count" id="count-destinos">0</span></button>
+        <button class="nav-item" data-resource="paquetes"><span>Paquetes</span><span class="nav-count" id="count-paquetes">0</span></button>
+        <button class="nav-item" data-resource="reservas"><span>Reservas</span><span class="nav-count" id="count-reservas">0</span></button>
+      </nav>
+      <a class="mobile-dashboard-link" href="{{ dashboard_url }}">Abrir analítica</a>
+      <div class="sidebar-note">
+        <p class="nav-label">MÁS ALLÁ DE LOS DATOS</p>
+        <h2>Decisiones para tu próximo viaje.</h2>
+        <p>Consulta las tendencias de tus reservas y conoce los destinos más visitados.</p>
+        <a class="dashboard-link" href="{{ dashboard_url }}">Abrir analítica <span aria-hidden="true">/</span></a>
+      </div>
+      <div class="connection"><span class="connection-dot" id="connection-dot" aria-hidden="true"></span><span id="connection-status" role="status">Conectando con la API</span></div>
+    </aside>
+
+    <main class="main-content" id="contenido" tabindex="-1">
+      <header class="topbar">
+        <p class="breadcrumb">Travel North <span>/</span> <span id="breadcrumb-current">Destinos</span></p>
+        <button class="button button-outline" id="refresh-button" type="button">Actualizar datos</button>
+      </header>
+      <div class="page">
+        <section class="page-heading" aria-labelledby="page-title">
+          <div><p class="eyebrow">AGENCIA DE VIAJES</p><h1 id="page-title">Destinos</h1><p id="page-description">Los lugares que forman parte de cada experiencia.</p></div>
+          <button class="button button-primary" id="create-button" type="button" disabled>Nuevo destino</button>
+        </section>
+        <div class="notice" id="page-notice" role="status" hidden></div>
+        <section class="panel" aria-labelledby="list-title" aria-busy="true" id="data-panel">
+          <div class="panel-heading">
+            <div><h2 id="list-title">Destinos registrados</h2><p id="record-count" aria-live="polite">Preparando la información</p></div>
+            <label class="search-box" for="search-input"><span>Buscar</span><input id="search-input" type="search" placeholder="Nombre, ciudad o código" autocomplete="off"></label>
+          </div>
+          <div class="table-scroll" id="table-container"></div>
+          <div class="empty-state" id="empty-state" role="status"><span class="state-number" aria-hidden="true">01</span><h3 id="empty-title">Cargando destinos</h3><p id="empty-description">Estamos consultando la información más reciente.</p></div>
+          <div class="panel-footer"><p id="section-tip">Organiza primero los destinos y después agrúpalos en paquetes.</p><p id="updated-at">Sin actualizar</p></div>
+        </section>
+        <p class="workspace-note">Cada viaje empieza con una buena organización.</p>
+      </div>
+      <noscript><p class="noscript">Activa JavaScript en tu navegador para consultar y gestionar los registros.</p></noscript>
+    </main>
+  </div>
+
+  <dialog id="record-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+    <form id="record-form">
+      <div class="modal-heading"><div><p class="eyebrow" id="dialog-eyebrow">NUEVO REGISTRO</p><h2 id="dialog-title">Crear destino</h2></div><button class="close-button" id="close-dialog" type="button" aria-label="Cerrar formulario">Cerrar</button></div>
+      <p class="form-introduction" id="dialog-description">Completa los campos marcados como obligatorios.</p>
+      <div class="notice notice-error" id="form-error" role="alert" tabindex="-1" hidden></div>
+
+      <fieldset class="fields-group" data-fields="destinos">
+        <legend class="visually-hidden">Datos del destino</legend>
+        <div class="form-grid">
+          <label for="destino-codigo">Código <span>(obligatorio)</span><input id="destino-codigo" name="codigo" maxlength="10" required placeholder="Ej. MED"></label>
+          <label for="destino-nombre">Nombre <span>(obligatorio)</span><input id="destino-nombre" name="nombre" maxlength="100" required placeholder="Ej. Medellín"></label>
+          <label for="destino-pais">País <span>(obligatorio)</span><input id="destino-pais" name="pais" maxlength="60" required autocomplete="country-name"></label>
+          <label for="destino-ciudad">Ciudad <span>(obligatorio)</span><input id="destino-ciudad" name="ciudad" maxlength="60" required autocomplete="address-level2"></label>
+          <label class="wide" for="destino-descripcion">Descripción <span>(opcional)</span><textarea id="destino-descripcion" name="descripcion" maxlength="500" rows="3" placeholder="Qué hace especial a este destino"></textarea></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="fields-group" data-fields="paquetes" hidden disabled>
+        <legend class="visually-hidden">Datos del paquete</legend>
+        <div class="form-grid">
+          <label class="wide" for="paquete-nombre">Nombre <span>(obligatorio)</span><input id="paquete-nombre" name="nombre" maxlength="120" required placeholder="Ej. Ruta del Caribe"></label>
+          <label for="paquete-precio">Precio por persona, COP <span>(obligatorio)</span><input id="paquete-precio" name="precio" type="number" min="0.01" step="0.01" required inputmode="decimal"></label>
+          <label for="paquete-duracion">Duración en días <span>(obligatorio)</span><input id="paquete-duracion" name="duracion_dias" type="number" min="1" step="1" required inputmode="numeric"></label>
+          <label for="paquete-inicio">Fecha de inicio <span>(obligatorio)</span><input id="paquete-inicio" name="fecha_inicio" type="date" required></label>
+          <label for="paquete-fin">Fecha de fin <span>(obligatorio)</span><input id="paquete-fin" name="fecha_fin" type="date" required></label>
+          <label for="paquete-cupo">Cupo máximo <span>(obligatorio)</span><input id="paquete-cupo" name="cupo_maximo" type="number" min="1" step="1" required inputmode="numeric"></label>
+          <label for="paquete-activo">Disponibilidad<select id="paquete-activo" name="activo"><option value="true">Activo</option><option value="false">Inactivo</option></select></label>
+          <label class="wide" for="paquete-descripcion">Descripción <span>(opcional)</span><textarea id="paquete-descripcion" name="descripcion" maxlength="1000" rows="3"></textarea></label>
+          <fieldset class="destination-fieldset wide"><legend>Destinos incluidos <span>(selecciona al menos uno)</span></legend><div class="destination-options" id="destination-options"></div></fieldset>
+        </div>
+      </fieldset>
+
+      <fieldset class="fields-group" data-fields="reservas" hidden disabled>
+        <legend class="visually-hidden">Datos de la reserva</legend>
+        <div class="form-grid">
+          <label class="wide" for="reserva-cliente">Nombre del cliente <span>(obligatorio)</span><input id="reserva-cliente" name="cliente_nombre" maxlength="120" required autocomplete="name"></label>
+          <label class="wide" for="reserva-email">Correo electrónico <span>(obligatorio)</span><input id="reserva-email" name="cliente_email" type="email" maxlength="160" required autocomplete="email"></label>
+          <label class="wide" for="reserva-paquete">Paquete turístico <span>(obligatorio)</span><select id="reserva-paquete" name="paquete_id" required aria-describedby="package-detail"></select></label>
+          <div class="package-detail wide" id="package-detail" role="status">Selecciona un paquete para consultar precio y disponibilidad.</div>
+          <label for="reserva-personas">Cantidad de personas <span>(obligatorio)</span><input id="reserva-personas" name="cantidad_personas" type="number" min="1" step="1" required inputmode="numeric" value="1"></label>
+          <label for="reserva-estado">Estado<select id="reserva-estado" name="estado"><option value="PENDIENTE">Pendiente</option><option value="CONFIRMADA">Confirmada</option><option value="CANCELADA">Cancelada</option></select></label>
+        </div>
+        <p class="form-hint">Las reservas pendientes y confirmadas ocupan cupos. Una reserva cancelada los libera. El valor confirmado no equivale a un pago recibido.</p>
+      </fieldset>
+
+      <div class="modal-actions"><button class="button button-outline" id="cancel-dialog" type="button">Cancelar</button><button class="button button-primary" id="save-button" type="submit">Crear registro</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

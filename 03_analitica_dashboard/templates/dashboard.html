@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Indicadores de reservas, paquetes y destinos de Travel North.">
+    <title>Analítica | Travel North</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <a class="skip-link" href="#contenido">Ir al contenido</a>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="{{ frontend_url }}" aria-label="Travel North, gestión de viajes">
+                <span class="brand-name">Travel North<span class="brand-dot">.</span></span>
+                <span class="brand-caption">Tu próximo destino comienza aquí</span>
+            </a>
+            <nav aria-label="Navegación principal">
+                <a href="{{ frontend_url }}">Gestión de viajes</a>
+                <span class="nav-current" aria-current="page">Analítica</span>
+            </nav>
+        </div>
+    </header>
+
+    <main id="contenido" class="page">
+        <section class="intro" aria-labelledby="titulo">
+            <div>
+                <p class="eyebrow">Panorama de la operación</p>
+                <h1 id="titulo">Cada viaje cuenta.</h1>
+                <p class="intro-text">Consulta la actividad de Travel North y encuentra qué paquetes y destinos concentran las reservas.</p>
+            </div>
+            <div class="update-control">
+                <button id="actualizar" type="button">Actualizar información</button>
+                <p class="timestamp">Última actualización: <time id="actualizado">sin consultar</time></p>
+            </div>
+        </section>
+
+        <div id="estado" class="status status-loading" role="status" aria-live="polite" aria-atomic="true">
+            Consultando la información de la API...
+        </div>
+        <noscript><p class="status status-error">Activa JavaScript para consultar los indicadores y las gráficas.</p></noscript>
+
+        <div id="reporte" aria-busy="true">
+            <section class="kpis" aria-label="Indicadores generales">
+                <article class="kpi">
+                    <h2>Destinos registrados</h2>
+                    <strong id="kpi-destinos">-</strong>
+                    <p>Lugares en nuestro catálogo</p>
+                </article>
+                <article class="kpi">
+                    <h2>Paquetes activos</h2>
+                    <strong id="kpi-paquetes">-</strong>
+                    <p>Oferta marcada como activa</p>
+                </article>
+                <article class="kpi">
+                    <h2>Reservas vigentes</h2>
+                    <strong id="kpi-reservas">-</strong>
+                    <p>Pendientes y confirmadas</p>
+                </article>
+                <article class="kpi">
+                    <h2>Personas reservadas</h2>
+                    <strong id="kpi-personas">-</strong>
+                    <p>Cupos en reservas vigentes</p>
+                </article>
+                <article class="kpi kpi-featured">
+                    <h2>Valor confirmado</h2>
+                    <strong id="kpi-valor">-</strong>
+                    <p>Valor de reservas confirmadas, en COP</p>
+                </article>
+            </section>
+
+            <section class="section-heading" aria-labelledby="titulo-graficas">
+                <div>
+                    <p class="eyebrow">Los datos del recorrido</p>
+                    <h2 id="titulo-graficas">Reservas y destinos en perspectiva</h2>
+                </div>
+                <p>Datos del registro completo. Actualiza después de hacer cambios en la gestión de viajes.</p>
+            </section>
+
+            <section class="charts" aria-label="Cinco visualizaciones de la operación">
+                <article class="chart-card chart-wide" aria-labelledby="titulo-meses">
+                    <div class="chart-heading"><span class="chart-number" aria-hidden="true">01</span><div>
+                        <p class="chart-type">Evolución mensual</p>
+                        <h3 id="titulo-meses">¿Cómo cambian las reservas con el tiempo?</h3>
+                    </div></div>
+                    <p id="historia-meses" class="story">Los resultados estarán disponibles al consultar la API.</p>
+                    <div class="chart-container">
+                        <canvas id="grafica-meses" role="img" aria-labelledby="titulo-meses" aria-describedby="historia-meses nota-meses">Consulta la tabla de datos situada debajo de esta gráfica.</canvas>
+                        <p id="vacio-meses" class="chart-empty" hidden>No hay reservas vigentes para mostrar.</p>
+                    </div>
+                    <p id="nota-meses" class="chart-note">Se cuenta cada reserva pendiente o confirmada por su mes de registro. Los meses intermedios sin registros aparecen en cero.</p>
+                    <details class="data-details"><summary>Ver datos de la gráfica</summary><div class="table-scroll"><table><caption>Reservas vigentes por mes</caption><thead><tr><th scope="col">Mes</th><th scope="col">Reservas</th></tr></thead><tbody id="tabla-meses"><tr><td colspan="2">Información pendiente de consulta.</td></tr></tbody></table></div></details>
+                </article>
+
+                <article class="chart-card" aria-labelledby="titulo-paquetes">
+                    <div class="chart-heading"><span class="chart-number" aria-hidden="true">02</span><div>
+                        <p class="chart-type">Paquetes más reservados</p>
+                        <h3 id="titulo-paquetes">¿Qué paquetes tienen más reservas?</h3>
+                    </div></div>
+                    <p id="historia-paquetes" class="story">Los resultados estarán disponibles al consultar la API.</p>
+                    <div class="chart-container"><canvas id="grafica-paquetes" role="img" aria-labelledby="titulo-paquetes" aria-describedby="historia-paquetes nota-paquetes">Consulta la tabla de datos situada debajo de esta gráfica.</canvas><p id="vacio-paquetes" class="chart-empty" hidden>No hay reservas vigentes para comparar.</p></div>
+                    <p id="nota-paquetes" class="chart-note">Se muestran hasta cinco paquetes, ordenados por cantidad de reservas vigentes. Una reserva puede incluir varias personas.</p>
+                    <details class="data-details"><summary>Ver datos de la gráfica</summary><div class="table-scroll"><table><caption>Hasta cinco paquetes con más reservas vigentes</caption><thead><tr><th scope="col">Paquete</th><th scope="col">Reservas</th></tr></thead><tbody id="tabla-paquetes"><tr><td colspan="2">Información pendiente de consulta.</td></tr></tbody></table></div></details>
+                </article>
+
+                <article class="chart-card" aria-labelledby="titulo-estados">
+                    <div class="chart-heading"><span class="chart-number" aria-hidden="true">03</span><div>
+                        <p class="chart-type">Estado de las reservas</p>
+                        <h3 id="titulo-estados">¿En qué estado se encuentran las reservas?</h3>
+                    </div></div>
+                    <p id="historia-estados" class="story">Los resultados estarán disponibles al consultar la API.</p>
+                    <div class="chart-container"><canvas id="grafica-estados" role="img" aria-labelledby="titulo-estados" aria-describedby="historia-estados nota-estados">Consulta la tabla de datos situada debajo de esta gráfica.</canvas><p id="vacio-estados" class="chart-empty" hidden>Aún no hay reservas registradas.</p></div>
+                    <p id="nota-estados" class="chart-note">Esta distribución incluye pendientes, confirmadas y canceladas. Los porcentajes se calculan sobre todas las reservas.</p>
+                    <details class="data-details"><summary>Ver datos de la gráfica</summary><div class="table-scroll"><table><caption>Reservas por estado</caption><thead><tr><th scope="col">Estado</th><th scope="col">Reservas</th><th scope="col">Porcentaje</th></tr></thead><tbody id="tabla-estados"><tr><td colspan="3">Información pendiente de consulta.</td></tr></tbody></table></div></details>
+                </article>
+
+                <article class="chart-card" aria-labelledby="titulo-valor">
+                    <div class="chart-heading"><span class="chart-number" aria-hidden="true">04</span><div>
+                        <p class="chart-type">Valor de las reservas</p>
+                        <h3 id="titulo-valor">¿Qué paquetes concentran el valor confirmado?</h3>
+                    </div></div>
+                    <p id="historia-valor" class="story">Los resultados estarán disponibles al consultar la API.</p>
+                    <div class="chart-container"><canvas id="grafica-valor" role="img" aria-labelledby="titulo-valor" aria-describedby="historia-valor nota-valor">Consulta la tabla de datos situada debajo de esta gráfica.</canvas><p id="vacio-valor" class="chart-empty" hidden>No hay valor confirmado para comparar.</p></div>
+                    <p id="nota-valor" class="chart-note">Suma del total de las reservas confirmadas por paquete, en pesos colombianos. No representa pagos cobrados.</p>
+                    <details class="data-details"><summary>Ver datos de la gráfica</summary><div class="table-scroll"><table><caption>Valor de reservas confirmadas por paquete</caption><thead><tr><th scope="col">Paquete</th><th scope="col">Valor en COP</th></tr></thead><tbody id="tabla-valor"><tr><td colspan="2">Información pendiente de consulta.</td></tr></tbody></table></div></details>
+                </article>
+
+                <article class="chart-card" aria-labelledby="titulo-destinos">
+                    <div class="chart-heading"><span class="chart-number" aria-hidden="true">05</span><div>
+                        <p class="chart-type">Participación de destinos</p>
+                        <h3 id="titulo-destinos">¿Cuántas personas tienen reservado cada destino?</h3>
+                    </div></div>
+                    <p id="historia-destinos" class="story">Los resultados estarán disponibles al consultar la API.</p>
+                    <div class="chart-container"><canvas id="grafica-destinos" role="img" aria-labelledby="titulo-destinos" aria-describedby="historia-destinos nota-destinos">Consulta la tabla de datos situada debajo de esta gráfica.</canvas><p id="vacio-destinos" class="chart-empty" hidden>No hay personas reservadas por destino.</p></div>
+                    <p id="nota-destinos" class="chart-note">Se suman las personas de reservas vigentes para cada destino. En un viaje multidestino, las mismas personas participan en varios lugares; no se deben sumar estas barras como personas únicas.</p>
+                    <details class="data-details"><summary>Ver datos de la gráfica</summary><div class="table-scroll"><table><caption>Personas de reservas vigentes por destino</caption><thead><tr><th scope="col">Destino</th><th scope="col">Personas reservadas</th></tr></thead><tbody id="tabla-destinos"><tr><td colspan="2">Información pendiente de consulta.</td></tr></tbody></table></div></details>
+                </article>
+            </section>
+        </div>
+        <aside class="reading-note" aria-label="Alcance de los indicadores">
+            <h2>Cómo leer este tablero</h2>
+            <p>Las cifras describen los registros disponibles y no explican por qué ocurren los cambios. “Vigente” significa pendiente o confirmada, sin filtrar por la fecha del viaje. Las personas se cuentan por reserva: un mismo cliente puede aparecer en más de una.</p>
+        </aside>
+    </main>
+    <footer class="site-footer"><span>Travel North</span><p>Gestión de viajes y análisis de reservas.</p></footer>
+    <script id="dashboard-config" type="application/json">{{ {"reportUrl": api_report_url}|tojson }}</script>
+    <script src="{{ url_for('static', filename='js/chart.umd.min.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+</body>
+</html>

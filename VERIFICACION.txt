@@ -1,0 +1,35 @@
+Travel North - Verificación de la entrega
+Fecha: 12 de noviembre de 2026
+
+Entorno comprobado: Windows, Python 3.12.14, Flask 3.1.3 y Chart.js 4.4.7.
+
+Pruebas automatizadas aprobadas: 30.
+- API y SQLite: 17.
+- Frontend: 6.
+- Dashboard: 5.
+- Integración HTTP: 2.
+
+Comprobaciones manuales en navegador:
+- Crear destino y crear paquete relacionado.
+- Rechazar una reserva que supera el cupo disponible.
+- Crear una reserva confirmada y verificar el aumento de indicadores.
+- Cancelar la reserva y verificar la reversión de esos indicadores.
+- Eliminar el registro temporal y comprobar la actualización del listado.
+- Mostrar indicadores en cero y mensajes claros con una base vacía.
+- Retirar resultados anteriores y mostrar error al detener la API.
+- Dibujar las cinco gráficas y revisar escritorio y pantalla móvil.
+- Corregir y volver a comprobar el ancho de los canvas al redimensionar.
+
+Preparación y ejecución:
+- preparar.ps1 creó los tres entornos, instaló Flask e inicializó SQLite.
+- iniciar.ps1 inició simultáneamente los puertos 5000, 5001 y 5002.
+- El lanzador rechazó una segunda ejecución con el puerto ocupado.
+- Ctrl+C detuvo los tres procesos iniciados por el lanzador.
+- Repetir seed_demo.py no duplicó los registros.
+
+Los escenarios de prueba usan registros ficticios. El ZIP no incluye entornos,
+cachés, bases generadas, credenciales ni logs. Al ejecutar preparar.ps1 se
+generan 6 destinos, 6 paquetes y 30 reservas de demostración.
+
+La adaptación conserva la temática de Travel North y utiliza tres aplicaciones
+Flask independientes, comunicación HTTP/JSON y SQLite según la guía proporcionada.

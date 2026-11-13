@@ -1,0 +1,95 @@
+TRAVEL NORTH - GUION PARA DOS PERSONAS
+Duración prevista: 8 minutos y 30 segundos.
+Límite: 10 minutos. Margen disponible: 1 minuto y 30 segundos.
+Persona 1: 0:00 a 4:15. Persona 2: 4:15 a 8:30.
+
+ANTES DE EMPEZAR, SIN LEER EN VOZ ALTA
+
+- Dejar funcionando las tres aplicaciones. No instalar dependencias durante la exposición.
+- Abrir tres pestañas: gestión en http://127.0.0.1:5001, tablero en http://127.0.0.1:5002 y reporte en http://127.0.0.1:5000/api/analitica/reporte.
+- Elegir previamente un paquete activo, con fecha futura y al menos dos cupos disponibles. Recordar su nombre y precio por persona.
+- Persona 1 maneja la pantalla mientras presenta; Persona 2 toma el control a los 4:15. La persona que no habla controla el tiempo.
+- Leer únicamente los párrafos marcados DECIR. Las acciones y los títulos son indicaciones para ustedes.
+- Si una operación falla, leer el mensaje y corregir una vez. Si persiste, explicar el resultado esperado sin afirmar que ocurrió y continuar. No intentar instalar ni depurar durante la presentación.
+
+PERSONA 1
+
+0:00 A 0:50 - PRESENTACIÓN DEL PROBLEMA
+PANTALLA: Gestión de viajes. Mostrar la marca y las secciones Destinos, Paquetes y Reservas.
+DECIR:
+Buenos días. Vamos a presentar Travel North, un proyecto para organizar la información de una agencia de viajes. La necesidad principal es administrar destinos, ofrecer paquetes turísticos y registrar reservas sin superar los cupos disponibles. También necesitamos consultar qué se está reservando y cómo cambia la actividad. El proyecto parte de la temática que trabajamos en las otras materias. Para esta entrega adaptamos sus entidades y procesos a Python con Flask y SQLite. Los registros que vamos a mostrar son ficticios y nos permiten demostrar el funcionamiento completo.
+FIN DECIR
+
+0:50 A 1:50 - LAS TRES APLICACIONES
+PANTALLA: Mostrar brevemente la dirección de Gestión, cambiar al reporte JSON y luego al tablero. Regresar a Gestión.
+DECIR:
+La solución tiene tres aplicaciones Flask independientes. La API funciona en el puerto cinco mil y se encarga de las reglas, los datos y los cálculos. La interfaz de gestión funciona en el cinco mil uno y presenta los formularios. El tablero funciona en el cinco mil dos y muestra los resultados. La comunicación ocurre mediante solicitudes HTTP y respuestas JSON, como esta que vemos aquí. Cuando usamos un formulario, JavaScript envía los datos a la API. Python los valida y consulta o modifica SQLite. El tablero solicita el reporte a esa misma API. Por eso, ambos muestran información de una sola base de datos.
+FIN DECIR
+
+1:50 A 2:35 - MODELO Y REGLAS
+PANTALLA: Abrir Paquetes. Señalar destinos, precio por persona y cupos del paquete elegido.
+DECIR:
+Las entidades principales son destinos, paquetes y reservas. Un paquete puede incluir varios destinos, y cada reserva pertenece a un paquete. SQLite conserva estas relaciones mediante claves foráneas. Las reservas pendientes y confirmadas ocupan cupo; las canceladas lo liberan. La API comprueba que el paquete esté disponible y que existan cupos suficientes. Además, calcula el total con el precio y la cantidad de personas. El usuario no escribe manualmente ese total ni la fecha de registro.
+FIN DECIR
+
+2:35 A 3:05 - PUNTO DE COMPARACIÓN
+PANTALLA: Abrir el tablero, pulsar Actualizar información y señalar Reservas vigentes, Personas reservadas y Valor confirmado. Anotar mentalmente o en papel esos tres valores.
+DECIR:
+Antes de crear una reserva, vamos a observar tres valores del tablero: reservas vigentes, personas reservadas y valor confirmado. Estos serán nuestro punto de comparación. No necesitamos que las cifras sean siempre las mismas: lo importante es comprobar cuánto cambian cuando hacemos una operación. Ahora registraremos una reserva confirmada para dos personas.
+FIN DECIR
+
+3:05 A 4:15 - CREAR LA RESERVA
+PANTALLA: Volver a Gestión, entrar en Reservas y pulsar Nueva reserva. Usar nombre Cliente Exposición, correo exposicion@example.com, paquete elegido, cantidad 2 y estado Confirmada. Pulsar Crear reserva y comprobar que aparece en la lista. No crear dos veces si tarda.
+DECIR:
+Seleccionamos el paquete que revisamos, escribimos los datos del cliente y reservamos para dos personas en estado confirmado. Al guardar, el navegador envía una solicitud POST con estos campos en JSON. La API valida la información, calcula el valor y guarda la reserva en SQLite. Aquí comprobamos que el registro aparece en el listado. El mismo sistema permite consultar, editar y eliminar registros; esas cuatro operaciones forman el CRUD. Ahora mi compañero va a mostrar cómo esta operación se refleja en los indicadores y en las gráficas.
+FIN DECIR
+
+PERSONA 2
+
+4:15 A 5:20 - ACTUALIZACIÓN Y CINCO KPI
+PANTALLA: Abrir el tablero y pulsar Actualizar información. Señalar los cinco indicadores. Comparar los tres valores anotados con los actuales antes de afirmar el cambio.
+DECIR:
+Actualizamos el tablero para consultar nuevamente la API. Tenemos cinco indicadores: destinos registrados, paquetes activos, reservas vigentes, personas reservadas y valor confirmado. Con la reserva que acabamos de crear, las reservas vigentes aumentan en uno y las personas en dos. El valor confirmado aumenta en dos veces el precio por persona del paquete. Los destinos y los paquetes no cambian porque no creamos registros de esas entidades. Una precisión importante: el valor confirmado corresponde a reservas confirmadas, no a pagos cobrados. Tampoco contamos clientes únicos; una misma persona puede participar en varias reservas. Estos criterios están explicados en el tablero para interpretar correctamente las cifras.
+FIN DECIR
+
+5:20 A 6:45 - CINCO GRÁFICAS Y CÁLCULO
+PANTALLA: Desplazarse lentamente por las cinco gráficas, señalando cada título. Abrir una sola opción Ver datos de la gráfica, si alcanza el tiempo.
+DECIR:
+Las cinco gráficas responden preguntas diferentes. La línea muestra cuántas reservas vigentes se registraron cada mes. Las barras horizontales comparan los cinco paquetes más reservados. La dona muestra la distribución entre pendientes, confirmadas y canceladas. Las siguientes barras comparan el valor confirmado por paquete. Finalmente, vemos cuántas personas tienen reservado cada destino. En esta última gráfica no debemos sumar todas las barras como personas únicas: si un paquete incluye dos destinos, sus viajeros aparecen en ambos. Cada gráfica tiene una interpretación breve y una tabla con los datos. Los cálculos se hacen en la API mediante SQL: contamos registros, sumamos personas y valores, y agrupamos por mes, paquete, estado o destino. Python entrega esos resultados como JSON; JavaScript y Chart.js los representan. Las gráficas describen lo que está registrado, pero no demuestran las causas de los cambios.
+FIN DECIR
+
+6:45 A 7:40 - CANCELACIÓN Y SEGUNDA COMPROBACIÓN
+PANTALLA: Volver a Gestión, buscar Cliente Exposición, pulsar Editar y cambiar únicamente Estado a Cancelada. Guardar. Volver al tablero y pulsar Actualizar información.
+DECIR:
+Ahora vamos a editar la misma reserva y cambiar su estado a cancelada. No la estamos eliminando: conservamos el registro, pero cambia su participación en los indicadores. Al actualizar, se descuenta una reserva vigente, se descuentan dos personas y se retira su valor del total confirmado. También se liberan los dos cupos. La reserva permanece visible en la distribución por estado, ahora dentro de canceladas. Con esta segunda operación comprobamos que el tablero responde a cambios reales guardados en la base de datos.
+FIN DECIR
+
+7:40 A 8:30 - VERIFICACIÓN Y CIERRE
+PANTALLA: Dejar el tablero visible, preferiblemente los indicadores y la primera gráfica. No abrir más archivos.
+DECIR:
+La entrega incluye pruebas de la API, de las interfaces y de la integración por HTTP. Se verifican operaciones y sus efectos sobre el reporte usando una base temporal, para no modificar los datos de demostración. También se comprobó el recorrido en el navegador. Con esta presentación mostramos tres aplicaciones independientes, formularios conectados con una API, persistencia en SQLite y cinco indicadores con cinco visualizaciones. El recorrido completo es: capturar información, validarla, almacenarla, calcular resultados y presentarlos. Gracias. Quedamos atentos a sus preguntas.
+FIN DECIR
+
+SI VAN RETRASADOS
+
+- No abrir las tablas alternativas ni el código.
+- Mantener la demostración de crear, actualizar, cancelar y actualizar: es la evidencia principal de integración.
+- En las gráficas, nombrar las cinco y conservar la explicación de multidestino y de que SQL calcula en el backend.
+- Terminar a los 8:30 si es posible. Usar el margen restante para preguntas o una operación que haya tardado.
+
+CINCO PREGUNTAS Y RESPUESTAS PARA DESPUÉS DEL GUION
+
+1. ¿Qué hace Python en este proyecto?
+Flask recibe las solicitudes de la API, ejecuta las validaciones y coordina las consultas SQL a SQLite. También sirve las páginas de gestión y analítica desde sus aplicaciones independientes. Chart.js dibuja las gráficas en el navegador.
+
+2. ¿Por qué el navegador no accede directamente a SQLite?
+La API centraliza el acceso y las reglas. Así, un dato pasa por las validaciones antes de almacenarse. El navegador trabaja con HTTP y JSON, sin abrir el archivo de la base de datos.
+
+3. ¿Qué diferencia hay entre CRUD y analítica?
+CRUD crea, consulta, modifica y elimina registros individuales. La analítica agrupa esos registros para obtener indicadores y comparaciones, como reservas por mes o valor por paquete.
+
+4. ¿Por qué el valor confirmado no equivale a ingresos cobrados?
+Porque el sistema registra reservas, pero no registra pagos. Confirmar una reserva permite calcular su valor; no demuestra que ese dinero haya sido recibido.
+
+5. ¿Qué se reutilizó del proyecto de las otras materias?
+La temática de Travel North, las entidades, sus relaciones y los procesos de gestión. Esta entrega es una adaptación con tres aplicaciones Flask y SQLite; no depende de mantener funcionando el backend Java del proyecto original.
